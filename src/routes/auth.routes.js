@@ -7,14 +7,17 @@ import {
   verifyEmail,
   resendEmailVerification,
   refreshAccessToken,
+  changePassword,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/auth-controller.js";
 
+import { verifyJWT } from "../middlewares/auth-middleware.js";
 import { validate } from "../middlewares/validator-middleware.js";
 import {
-  userLoginValidator,
   userRegisterValidator,
+  userLoginValidator,
 } from "../validators/index.js";
-import { verifyJWT } from "../middlewares/auth-middleware.js";
 
 const router = Router();
 
@@ -40,6 +43,11 @@ router.post(
   logoutUser
 );
 
+router.post(
+  "/refresh-token",
+  refreshAccessToken
+);
+
 /* ================= USER ================= */
 
 router.get(
@@ -59,9 +67,23 @@ router.post(
   resendEmailVerification
 );
 
+/* ================= PASSWORD ================= */
+
 router.post(
-  "/refresh-token",
-  refreshAccessToken
+  "/change-password",
+  verifyJWT,
+  changePassword
+);
+
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
+
+router.post(
+  "/reset-password/:resetToken",
+  resetPassword
 );
 
 export default router;
+
